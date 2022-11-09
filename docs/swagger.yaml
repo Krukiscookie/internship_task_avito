@@ -1,0 +1,304 @@
+basePath: /
+definitions:
+  handler.Error:
+    properties:
+      message:
+        type: string
+    type: object
+  models.Account:
+    properties:
+      balance:
+        type: number
+      id:
+        type: integer
+      reserve:
+        type: number
+    type: object
+  models.GetService:
+    properties:
+      month:
+        type: string
+      year:
+        type: string
+    type: object
+  models.GetTransactions:
+    properties:
+      dateFrom:
+        type: string
+      dateTo:
+        type: string
+      page:
+        type: integer
+      sortBy:
+        type: string
+      sortOrder:
+        type: string
+      user:
+        type: integer
+    type: object
+  models.SwagAccount:
+    properties:
+      balance:
+        type: number
+      id:
+        type: integer
+    type: object
+  models.SwagServices:
+    properties:
+      account:
+        type: integer
+      amount:
+        type: number
+      id-order:
+        type: integer
+      id-service:
+        type: integer
+    type: object
+  models.SwagTransaction:
+    properties:
+      amount:
+        type: number
+      from:
+        type: integer
+      status:
+        type: string
+      to:
+        type: integer
+    type: object
+host: localhost:8000
+info:
+  contact: {}
+  description: Microservice for working with user balance
+  title: User balance API
+  version: 1.0.0
+paths:
+  /reports/{path}:
+    get:
+      description: '"Open report file"'
+      parameters:
+      - description: path
+        in: path
+        name: path
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: body
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Error'
+      summary: ReadFile
+      tags:
+      - reports
+  /reports/services-report:
+    post:
+      consumes:
+      - application/json
+      description: '"Get monthly service report"'
+      parameters:
+      - description: JSON object with year and month
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.GetService'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Error'
+      summary: ServiceReport
+      tags:
+      - reports
+  /reports/transaction:
+    post:
+      consumes:
+      - application/json
+      description: '"Get user transactions log"'
+      parameters:
+      - description: JSON object with user ID, sorting method, date from and date
+          to
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.GetTransactions'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Error'
+      summary: TransactionInfo
+      tags:
+      - reports
+  /user-money/{id}:
+    get:
+      description: '"Get information about account balance"'
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Account'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Error'
+      summary: GetBalance
+      tags:
+      - user-money
+  /user-money/addmoney:
+    post:
+      consumes:
+      - application/json
+      description: '"Add money for a given account"'
+      parameters:
+      - description: JSON with user ID and money amount
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.SwagAccount'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: successfully add money
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Error'
+      summary: AddMoney
+      tags:
+      - user-money
+  /user-money/services/approve:
+    post:
+      consumes:
+      - application/json
+      description: '"Confirms the payment and writes off the money from the reserve"'
+      parameters:
+      - description: JSON object with user ID, service ID, order ID and amount
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.SwagServices'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: successful payment
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Error'
+      summary: ServiceApprove
+      tags:
+      - user-money
+  /user-money/services/refusal:
+    post:
+      consumes:
+      - application/json
+      description: '"Cancels the payment and returns the money to the balance"'
+      parameters:
+      - description: JSON object with user ID, service ID, order ID and amount
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.SwagServices'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: payment cancellation
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Error'
+      summary: ServiceRefusal
+      tags:
+      - user-money
+  /user-money/services/reserve:
+    post:
+      consumes:
+      - application/json
+      description: '"Сreates an order and reserves money on the account"'
+      parameters:
+      - description: JSON object with user ID, service ID, order ID and amount
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.SwagServices'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: successfully reserve money for payment
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Error'
+      summary: ServiceReserve
+      tags:
+      - user-money
+  /user-money/transfer:
+    post:
+      consumes:
+      - application/json
+      description: '"Transferring money to another user"'
+      parameters:
+      - description: JSON object with ID_from, ID_to, money amount and status to transfer
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.SwagTransaction'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: successfully transfer money
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Error'
+      summary: TransferMoney
+      tags:
+      - user-money
+swagger: "2.0"

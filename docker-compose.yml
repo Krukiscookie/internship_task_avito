@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+  intern_task:
+    build: ./
+    command: ./wait-for-postgres.sh db ./intern_task
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    environment:
+      - POSTGRES_PASSWORD=test
+
+  db:
+    restart: always
+    image: postgres:latest
+    volumes:
+      - ./.database/postgres/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=test
+    ports:
+      - 5436:5432

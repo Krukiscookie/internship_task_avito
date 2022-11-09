@@ -1,0 +1,466 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Microservice for working with user balance",
+        "title": "User balance API",
+        "contact": {},
+        "version": "1.0.0"
+    },
+    "host": "localhost:8000",
+    "basePath": "/",
+    "paths": {
+        "/reports/services-report": {
+            "post": {
+                "description": "\"Get monthly service report\"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reports"
+                ],
+                "summary": "ServiceReport",
+                "parameters": [
+                    {
+                        "description": "JSON object with year and month",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.GetService"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/reports/transaction": {
+            "post": {
+                "description": "\"Get user transactions log\"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reports"
+                ],
+                "summary": "TransactionInfo",
+                "parameters": [
+                    {
+                        "description": "JSON object with user ID, sorting method, date from and date to",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.GetTransactions"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/reports/{path}": {
+            "get": {
+                "description": "\"Open report file\"",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reports"
+                ],
+                "summary": "ReadFile",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "path",
+                        "name": "path",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "body"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-money/addmoney": {
+            "post": {
+                "description": "\"Add money for a given account\"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user-money"
+                ],
+                "summary": "AddMoney",
+                "parameters": [
+                    {
+                        "description": "JSON with user ID and money amount",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.SwagAccount"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfully add money",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-money/services/approve": {
+            "post": {
+                "description": "\"Confirms the payment and writes off the money from the reserve\"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user-money"
+                ],
+                "summary": "ServiceApprove",
+                "parameters": [
+                    {
+                        "description": "JSON object with user ID, service ID, order ID and amount",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.SwagServices"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful payment",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-money/services/refusal": {
+            "post": {
+                "description": "\"Cancels the payment and returns the money to the balance\"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user-money"
+                ],
+                "summary": "ServiceRefusal",
+                "parameters": [
+                    {
+                        "description": "JSON object with user ID, service ID, order ID and amount",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.SwagServices"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "payment cancellation",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-money/services/reserve": {
+            "post": {
+                "description": "\"Сreates an order and reserves money on the account\"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user-money"
+                ],
+                "summary": "ServiceReserve",
+                "parameters": [
+                    {
+                        "description": "JSON object with user ID, service ID, order ID and amount",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.SwagServices"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfully reserve money for payment",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-money/transfer": {
+            "post": {
+                "description": "\"Transferring money to another user\"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user-money"
+                ],
+                "summary": "TransferMoney",
+                "parameters": [
+                    {
+                        "description": "JSON object with ID_from, ID_to, money amount and status to transfer",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.SwagTransaction"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfully transfer money",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-money/{id}": {
+            "get": {
+                "description": "\"Get information about account balance\"",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user-money"
+                ],
+                "summary": "GetBalance",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Account"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "handler.Error": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Account": {
+            "type": "object",
+            "properties": {
+                "balance": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "reserve": {
+                    "type": "number"
+                }
+            }
+        },
+        "models.GetService": {
+            "type": "object",
+            "properties": {
+                "month": {
+                    "type": "string"
+                },
+                "year": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.GetTransactions": {
+            "type": "object",
+            "properties": {
+                "dateFrom": {
+                    "type": "string"
+                },
+                "dateTo": {
+                    "type": "string"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "sortBy": {
+                    "type": "string"
+                },
+                "sortOrder": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.SwagAccount": {
+            "type": "object",
+            "properties": {
+                "balance": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.SwagServices": {
+            "type": "object",
+            "properties": {
+                "account": {
+                    "type": "integer"
+                },
+                "amount": {
+                    "type": "number"
+                },
+                "id-order": {
+                    "type": "integer"
+                },
+                "id-service": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.SwagTransaction": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "from": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "to": {
+                    "type": "integer"
+                }
+            }
+        }
+    }
+}

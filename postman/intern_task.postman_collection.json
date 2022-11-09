@@ -1,0 +1,268 @@
+{
+	"info": {
+		"_postman_id": "384da46d-94da-49f0-87d7-0ece509b15b1",
+		"name": "intern_task",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23918070"
+	},
+	"item": [
+		{
+			"name": "GetBalance",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/user-money/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"user-money",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddMoney",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"balance\": 344.23,\n  \"id\": 7\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/user-money/addmoney",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"user-money",
+						"addmoney"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TransferMoney",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"amount\": 243.4,\n  \"from\": 1,\n  \"status\": \"New Transaction\",\n  \"to\": 2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/user-money/transfer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"user-money",
+						"transfer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ServiceReserve",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"account\": 1,\n  \"amount\": 332.3,\n  \"id-order\": 14,\n  \"id-service\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/user-money/services/reserve",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"user-money",
+						"services",
+						"reserve"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ServiceApprove",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"account\": 1,\n  \"amount\": 332.3,\n  \"id-order\": 14,\n  \"id-service\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/user-money/services/approve",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"user-money",
+						"services",
+						"approve"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ServiceRefusal",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"account\": 15,\n  \"amount\": 32.3,\n  \"id-order\": 13,\n  \"id-service\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/user-money/services/refusal",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"user-money",
+						"services",
+						"refusal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ServiceReport",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"month\": \"11\",\n  \"year\": \"2022\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/reports/services-report",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"reports",
+						"services-report"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TransactionInfo",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"dateFrom\": \"2022-11-09\",\n  \"dateTo\": \"2022-11-10\",\n  \"page\": 1,\n  \"sortBy\": \"amount\",\n  \"sortOrder\": \"ascending\",\n  \"user\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/reports/transaction",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"reports",
+						"transaction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ReadFile",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/reports/user_1_report_10_Nov_22_00:54_+06.csv",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"reports",
+						"user_1_report_10_Nov_22_00:54_+06.csv"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
